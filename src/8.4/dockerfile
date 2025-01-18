@@ -1,0 +1,24 @@
+FROM php:8.4-apache
+
+ENV TZ=UTC
+# in some case you shuld change user id (1000)
+ENV WWWGROUP=1000
+ENV WWWUSER=1000
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+ENV USERNAME=www-data
+
+RUN apt-get update -y && apt-get install -y cron supervisor unzip libzip-dev libpng-dev libjpeg-dev libwebp-dev libfreetype6-dev libjpeg62-turbo-dev
+
+RUN pecl install redis \
+    && docker-php-ext-install mysqli pdo pdo_mysql gd zip pcntl \
+    && docker-php-ext-enable mysqli pdo pdo_mysql gd zip pcntl redis \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
+
+
+#install composer
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN install-php-extensions @composer-2
+
+RUN a2enmod rewrite \
+    && usermod -u $WWWUSER $USERNAME \
+    && groupmod -g $WWWGROUP $USERNAME
