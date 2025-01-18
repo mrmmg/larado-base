@@ -22,3 +22,6 @@ RUN install-php-extensions @composer-2
 RUN a2enmod rewrite \
     && usermod -u $WWWUSER $USERNAME \
     && groupmod -g $WWWGROUP $USERNAME
+
+# docker file description
+# build command: docker build -t larado:php8.4-1 -t larado:latest --push .
