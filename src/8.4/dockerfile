@@ -11,8 +11,8 @@ RUN apt-get update -y && apt-get install -y cron supervisor unzip libzip-dev lib
 
 RUN pecl install redis xdebug \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install mysqli pdo pdo_mysql gd zip pcntl intl exif\
-    && docker-php-ext-enable mysqli pdo pdo_mysql gd zip pcntl intl redis exif xdebug
+    && docker-php-ext-install mysqli pdo pdo_mysql gd zip pcntl intl exif sockets\
+    && docker-php-ext-enable mysqli pdo pdo_mysql gd zip pcntl intl redis exif xdebug sockets
 
 # Configure Xdebug
 RUN cat << 'EOF' > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
